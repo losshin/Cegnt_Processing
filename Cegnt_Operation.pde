@@ -4,15 +4,17 @@ import java.util.ArrayList;
 
 ArrayList<SeaStallion> unit1 = new ArrayList<SeaStallion>();
 ArrayList<TankDardoIrv> unit2 = new ArrayList<TankDardoIrv>();
+ArrayList<Lav25> unit3 = new ArrayList<Lav25>();
+ArrayList<TrukRoket> unit4 = new ArrayList<TrukRoket>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
 Opening mainMenu;
 Mountain mountain = new Mountain();
-TrukRoket s400 = new TrukRoket((width / 100) * 50, 276, 1,0);
 
-int kes;
-int highlightedUnit = -1;
-SoundFile audioHydraulic;
+int kes, highlightedUnit = -1, numStars = 200;
+Star[] sky = new Star[numStars];
+float moveCam;
+SoundFile audioHydraulic; 
 SoundFile audioTruckDriving;
 
 void setup(){
@@ -27,13 +29,12 @@ void setup(){
   mainMenu = new Opening(menuFont, exitFont, 0);
 
   // background
-  sky = new PVector[numStars];
   b1 = color(46, 2, 173);
   b2 = color(0, 105, 229);
   m1 = color(19, 0, 115);
   m2 = color(1, 16, 142);
   for (int i = 0; i < numStars; i++) {
-    sky[i] = new PVector(random(width), random(0, 270));
+    sky[i] = new Star();
   }
 
   // Audio
@@ -42,13 +43,13 @@ void setup(){
   
   // Audio Volume
   audioHydraulic.amp(0.3);
-  audioTruckDriving.amp(0.3);
+  audioTruckDriving.amp(0.1);
   
   enemies.add(new Enemy((width - 100), 350, 0, 500));
 }
 
 void draw(){  
-  background(100);
+  background(0);
   push();
   translate(0,-250,-1);
   setGradient(0, 0, width, 0.85 * height, b1, b2, 1);
@@ -57,20 +58,21 @@ void draw(){
   stroke(m2);
   mountain.display(1.5, 550);
   noStroke();
+  // kode bintang
   for (int i = 0; i < numStars; i++) {
-    Star star = new Star(sky[i].x, sky[i].y);
-    star.shine();
+    sky[i] = new Star();
   }
   pop();
   
   mainMenu.show();
-      
-  
-  
+    
   println(kes);
 
-  //text("Mouse X = " + mouseX, width/2, 20);
-  //text("Mouse Y = " + mouseY, width/2, 30);
+push();
+textSize(20);
+  text("Mouse X = " + mouseX, width/2, 20);
+  text("Mouse Y = " + mouseY, width/2, 60);
+  pop();
 }
 
 void mouseClicked() {
@@ -86,8 +88,12 @@ void mouseClicked() {
       } else if (i == 1) {
         unit2.add(new TankDardoIrv(-50, 350, 2, 0)); // Menambahkan objek TankDardoIrv ke ArrayList
       } else if (i == 2) {
-        
+        unit3.add(new Lav25(-200, 333, 3, 0)); // Menambahkan objek Lav 25 ke ArrayList
+      } else if (i == 3) {
+        unit4.add(new TrukRoket(-100, 277, 0.5,0)); // Menambahkan objek Truk Roket ke ArrayList
       }
+      
+      
       println("Tombol Unit " + (i + 1) + " diklik!");  // Untuk cek posisi array/ tombol yang ditekan
       kes = i;
       break;
@@ -104,6 +110,8 @@ void bottomNavigation(int posX, int posY) {
   ssIcon.icon();
   TankDardoIrv diIcon = new TankDardoIrv((width / 100) * 27.5, 517, 0,0);
   diIcon.icon();
+  Lav25 lavIcon = new Lav25((width / 100) * 35, 505, 0,0);
+  lavIcon.icon();
   TrukRoket trIcon = new TrukRoket((width / 100) * 50.5, 511, 0,0);
   trIcon.icon();
     
@@ -156,9 +164,6 @@ void mouseMoved() {
 
 
 // ------------------- background ------------------
-
-PVector[] sky;
-int numStars = 200;
 color b1, b2, m1, m2, m3;
 
 class Mountain {
@@ -183,18 +188,10 @@ class Mountain {
 }
 
 class Star {
-  float x, y;
-  int c;
-  float a, dir, sz;
-
-  Star(float xpos, float ypos) {
+  float x, y, c = 255, a =-1, dir, sz;
+  
+  Star() {
     noStroke();
-    x = xpos;
-    y = ypos;
-    c = color(255);
-    a = -1;
-    dir = 0.0;
-    sz = 0.0;
   }
 
   void shine() {

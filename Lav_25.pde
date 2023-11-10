@@ -103,10 +103,10 @@ class Lav25{
     
     //endShape();
     //noFill();    
-    ban(0,0);    
-    ban(85,0);    
-    ban(188,0);        
-    ban(275,0);
+    ban(0,0, Zrotate);    
+    ban(85,0, Zrotate);    
+    ban(188,0, Zrotate);        
+    ban(275,0, Zrotate);
     
     
     //vertex(383,94);  //24
@@ -115,6 +115,18 @@ class Lav25{
   // Show 
   void display(){    
     push();
+    translate(Xpos,Ypos);
+    scale(radians(9.2));
+    lav25();
+    pop();
+  }
+  
+   // Icon
+  void icon(){
+    push();
+    translate(Xpos, Ypos, 5);
+    scale(radians(8.5));  // Lav25 size
+    fill(0);
     lav25();
     pop();
   }
@@ -126,12 +138,27 @@ class Lav25{
       
     }
   }
+  
+  // Ketika bertabrakan
+  void tabrakEnemies(ArrayList<Enemy> enemies) {
+    for (int i = enemies.size() - 1; i >= 0; i--) {
+      Enemy enemy = enemies.get(i);
+      float distance = dist(Xpos, Ypos, enemy.Xpos, enemy.Ypos);
+      if (distance < 100) { // Jarak yang diperlukan untuk tabrakan
+        enemy.kurangiKesehatan(10); // Kurangi kesehatan musuh
+        if (enemy.kesehatan <= 0) {
+          enemies.remove(i); // Hapus musuh jika kesehatannya habis
+        }
+      }
+    }
+  }
 }
 
-void ban(int x, int y){
+void ban(int x, int y, float tireRotation){
   fill(000);
   pushMatrix();
   translate(x,y);  
+  //rotateZ(tireRotation+second());
   circle(459,378,20);
   circle(459,378,52);
   circle(459,378,80);

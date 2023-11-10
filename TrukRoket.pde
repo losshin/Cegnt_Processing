@@ -295,7 +295,7 @@ class TrukRoket {
     push();
     translate(Xpos, Ypos, 5);
     //rotateY(radians(180));
-    scale(radians(5.5));  // Sea Stallion size
+    scale(radians(5.5));  // Truk Roket size
     fill(0);
     s400();
     pop();
@@ -304,8 +304,9 @@ class TrukRoket {
   // Movement
   void move(){
     Xpos += kecepatan;
-    putaranBan += 0.5;
-    if (Xpos > width) {
+    putaranBan += kecepatan;
+    if (putaranBan >= 0) {
+      audioTruckDriving.play();
     }
   }
   
@@ -334,18 +335,14 @@ class TrukRoket {
           }
         }
       }
-    } else {
-      soundDown();
-    }
-    
-    if (keyPressed){ 
-      if (keyCode == RIGHT){ //jika tombol arah kanan maka truk bergerak ke depan      
+      
+      if (key == 'd'){ //jika tombol arah kanan maka truk bergerak ke depan      
         kecepatan += 10;
         putaranBan += 0.5;
         if (!audioTruckDriving.isPlaying()) {
           audioTruckDriving.play();
         }
-      } else if(keyCode == LEFT){ // jika tombol ke kiri ditekan maka truk aka beregerak ke belakang
+      } else if(key == 'a'){ // jika tombol ke kiri ditekan maka truk aka beregerak ke belakang
         kecepatan -= 10;
         putaranBan -= 0.5;
         if (!audioTruckDriving.isPlaying()) {
@@ -353,7 +350,7 @@ class TrukRoket {
         }
       }
     } else {
-      soundDown();         
+      soundDown();
     }
   }
   

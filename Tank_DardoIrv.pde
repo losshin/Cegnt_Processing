@@ -154,7 +154,7 @@ class TankDardoIrv{
     push();
     translate(Xpos, Ypos, 5);
     //rotateY(radians(180));
-    scale(radians(5));  // Sea Stallion size
+    scale(radians(5));  // Tank Dardo Irv size
     fill(0);
     dardo_irv();
     pop();

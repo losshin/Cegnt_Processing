@@ -19,7 +19,7 @@ class Enemy {
     push();
     translate(Xpos, Ypos);
     box(100);
-    // Tampilkan health bar di atas musuh
+    // Health bar di atas musuh
     fill(255, 0, 0);
     rect(-50, -70, healthBarWidth, 5);
     pop();

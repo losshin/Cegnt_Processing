@@ -23,37 +23,50 @@ class Opening {
     textFont(menuFont);
     fill(224,224,224);
     
-    text("Play", 150, 320);
-    text("Credits", 170, 400);
-    text("Exit", 160, 480);
+    text("Play", 460, 496);
+    textSize(50);
+    text("Credits", 283, 556);
+    text("Exit", 600, 556);
     
-    if (dist(mouseX, mouseY, 215, 310)<35 || dist(mouseX, mouseY, 280, 310)<35) {
+    if (dist(mouseX, mouseY, 515, 483)<50) {
       fill(102, 178, 255);
-      text("Play", 150, 320);
+      textSize(55);
+      text("Play", 460, 496);
       if (mousePressed) {
         panels = 1;
       }
     }
-    if (dist(mouseX, mouseY, 240, 390)<35 || dist(mouseX, mouseY, 170, 380)<35 || dist(mouseX, mouseY, 320, 390)<35) {
+    if (dist(mouseX, mouseY, 360, 540)<80) {
       fill(102, 178, 255);
-      text("Credits", 170, 400);
+      text("Credits", 283, 556);
       if (mousePressed) {
         panels = 2;
       }
     }
-    if (dist(mouseX, mouseY, 210, 470)<35 || dist(mouseX, mouseY, 280, 470)<35) {
+    if (dist(mouseX, mouseY, 640, 536)<35) {
       fill(102, 178, 255);
-      text("Exit", 160, 480);
+      text("Exit", 600, 556);
       if (mousePressed) {
         panels = 3;
       }
     }
   }
   
-  
   // ------------------- Game --------------------------------------
   void play() {
     // masukkan kode game disini
+  if(keyPressed){
+    if(keyCode == LEFT){
+      if(moveCam != 0){
+        moveCam -= 5;
+      } 
+     } else if (keyCode == RIGHT){
+       if(moveCam != 600){
+         moveCam += 5;
+       }
+     }
+    }
+    //camera(moveCam+0,0,2, moveCam+0,0,2,0,0,0);
     
     // Land
     push();
@@ -63,7 +76,7 @@ class Opening {
     
     bottomNavigation(0,460);
     
-    // Sea Stallion
+    // [Sea Stallion]
     for (SeaStallion unit : unit1) {
       for (Enemy enemy : enemies) {
         float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
@@ -76,7 +89,7 @@ class Opening {
       unit.move();
     }
     
-    // Tank Dardo-Irv
+    // [Tank Dardo-Irv]
     for (TankDardoIrv unit : unit2) {
       //for (Enemy enemy : enemies) {
       //  float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
@@ -90,13 +103,35 @@ class Opening {
       unit.tabrakEnemies(enemies);
     }  
     
-    // Truk Roket
-    s400.display();
-    s400.controlled();
-    //s.keyReleased();
-    //s.move();
+    // [Lav-25]
+    for (Lav25 unit : unit3) {
+      for (Enemy enemy : enemies) {
+        float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+        if (distance < 700) {
+          unit.Xspeed = 0;
+          enemy.Xspeed = 0;
+        }
+      }
+      unit.display();
+      unit.move();
+      unit.tabrakEnemies(enemies);
+    }
     
-    // Enemy
+    
+    // [Truk Roket]
+    for (TrukRoket unit : unit4) {
+      for (Enemy enemy : enemies) {
+        float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+        if (distance < 800) {
+          unit.kecepatan = 0;
+          enemy.Xspeed = 0;
+        }
+      }
+      unit.display();
+      unit.move();
+    }
+    
+    // [Enemy]
     for (int i = enemies.size() - 1; i >= 0; i--) {
       Enemy enemy = enemies.get(i);
       enemy.display();
@@ -128,20 +163,20 @@ class Opening {
     textFont(exitFont);
     
     fill(224,224,224);
-    text("Are you Sure?", 100, 280);
-    text("Yes...", 200, 390);
-    text("No!", 200, 480);
+    text("Are you Sure?", 354, 502);
+    text("Yes...", 365, 554);
+    text("No!", 555, 554);
   
-    if (dist(mouseX, mouseY, 230, 380)<35) {
+    if (dist(mouseX, mouseY, 395, 544)<35) {
       fill(102, 178, 255);
-      text("Yes...", 200, 390);
+      text("Yes...", 365, 554);
       if (mousePressed) {
         exit();
       }
     }
-    if (dist(mouseX, mouseY, 230, 480)<35) {
+    if (dist(mouseX, mouseY, 580, 544)<35) {
       fill(102, 178, 255);
-      text("No!", 200, 480);
+      text("No!", 555, 554);
       if (mousePressed) {
         panels = 0;
         delay(100);
