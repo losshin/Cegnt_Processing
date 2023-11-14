@@ -33,6 +33,7 @@ class Opening {
       textSize(55);
       text("Play", 460, 496);
       if (mousePressed) {
+        soundOpening(0);
         panels = 1;
       }
     }
@@ -40,6 +41,7 @@ class Opening {
       fill(102, 178, 255);
       text("Credits", 283, 556);
       if (mousePressed) {
+        soundOpening(0);
         panels = 2;
       }
     }
@@ -47,6 +49,7 @@ class Opening {
       fill(102, 178, 255);
       text("Exit", 600, 556);
       if (mousePressed) {
+        soundOpening(0);
         panels = 3;
       }
     }
@@ -54,91 +57,9 @@ class Opening {
   
   // ------------------- Game --------------------------------------
   void play() {
-    // masukkan kode game disini
-  if(keyPressed){
-    if(keyCode == LEFT){
-      if(moveCam != 0){
-        moveCam -= 5;
-      } 
-     } else if (keyCode == RIGHT){
-       if(moveCam != 600){
-         moveCam += 5;
-       }
-     }
-    }
-    //camera(moveCam+0,0,2, moveCam+0,0,2,0,0,0);
-    
-    // Land
-    push();
-    fill(0);
-    rect(0,400,width,400);
-    pop();
-    
-    bottomNavigation(0,460);
-    
-    // [Sea Stallion]
-    for (SeaStallion unit : unit1) {
-      for (Enemy enemy : enemies) {
-        float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
-        if (distance < 50) {
-          unit.Xspeed = 0;
-          enemy.Xspeed = 0;
-        }
-      }
-      unit.display();
-      unit.move();
-    }
-    
-    // [Tank Dardo-Irv]
-    for (TankDardoIrv unit : unit2) {
-      //for (Enemy enemy : enemies) {
-      //  float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
-      //  if (distance < 300) {
-      //    unit.Xspeed = 0;
-      //    enemy.Xspeed = 0;
-      //  }
-      //}
-      unit.display();
-      unit.move();
-      unit.tabrakEnemies(enemies);
-    }  
-    
-    // [Lav-25]
-    for (Lav25 unit : unit3) {
-      for (Enemy enemy : enemies) {
-        float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
-        if (distance < 700) {
-          unit.Xspeed = 0;
-          enemy.Xspeed = 0;
-        }
-      }
-      unit.display();
-      unit.move();
-      unit.tabrakEnemies(enemies);
-    }
-    
-    
-    // [Truk Roket]
-    for (TrukRoket unit : unit4) {
-      for (Enemy enemy : enemies) {
-        float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
-        if (distance < 800) {
-          unit.kecepatan = 0;
-          enemy.Xspeed = 0;
-        }
-      }
-      unit.display();
-      unit.move();
-    }
-    
-    // [Enemy]
-    for (int i = enemies.size() - 1; i >= 0; i--) {
-      Enemy enemy = enemies.get(i);
-      enemy.display();
-      enemy.move();
-    }
-    //-------------------------- end -----------------------
+    bottomNavigation(0,460);    
   }  
+  
   
   // -------------------------- Credits -----------------------------
   void credits() {
@@ -178,10 +99,28 @@ class Opening {
       fill(102, 178, 255);
       text("No!", 555, 554);
       if (mousePressed) {
+        soundOpening(0);
         panels = 0;
         delay(100);
       }
     }
   }
 
+
+  // Sound
+  void soundOpening(int i){
+    switch(i){
+      case 0: 
+        audioClick.play();
+        delay(10);
+        audioClick.stop();
+        break;
+      case 1:
+        
+        break;
+      case 2:
+        
+        break;
+    }    
+  }
 }

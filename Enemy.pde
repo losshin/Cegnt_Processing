@@ -11,17 +11,14 @@ class Enemy {
     this.Ypos = Ypos;
     this.Xspeed = Xspeed;
     this.kesehatan = kesehatan;
-    this.healthBarWidth = 100; // Lebar health bar awal
   }
 
   // Display
   void display() {
     push();
     translate(Xpos, Ypos);
-    box(100);
-    // Health bar di atas musuh
-    fill(255, 0, 0);
-    rect(-50, -70, healthBarWidth, 5);
+    musuh();
+    //box(100);
     pop();
   }
 
@@ -38,6 +35,19 @@ class Enemy {
   
   // Enemy Tower
   void musuh() {
-    
+    pushMatrix();
+    fill(250);
+    translate(0,50,0);
+    box(80,15,100);
+    translate(0,-10,0);
+    box(50,10,50);
+    push();
+    translate(0,-15,0);
+    box(15, 35, 15);    
+    //rotateY(second());
+    translate(10,-15,0);
+    box(80, 25, 30);
+    pop();
+    popMatrix();
   }
 }

@@ -103,10 +103,10 @@ class Lav25{
     
     //endShape();
     //noFill();    
-    ban(0,0, Zrotate);    
-    ban(85,0, Zrotate);    
-    ban(188,0, Zrotate);        
-    ban(275,0, Zrotate);
+    ban(0,0);    
+    ban(85,0);    
+    ban(188,0);        
+    ban(275,0);
     
     
     //vertex(383,94);  //24
@@ -154,20 +154,19 @@ class Lav25{
   }
 }
 
-void ban(int x, int y, float tireRotation){
+void ban(int x, int y){
   fill(000);
   pushMatrix();
-  translate(x,y);  
-  //rotateZ(tireRotation+second());
+  translate(x,y);
   circle(459,378,20);
   circle(459,378,52);
   circle(459,378,80);
   
-  fill(#FAF7F7);
-  strokeWeight(0);  
-  ellipse(472-11, 353+12, 4, 4);
-  ellipse(504-25, 384, 4, 4);
-  ellipse(472-11, 412-15, 4, 4);
-  ellipse(442, 384, 4, 4);
+  //fill(#FAF7F7);
+  //strokeWeight(0);  
+  //ellipse(472-11, 353+12, 4, 4);
+  //ellipse(504-25, 384, 4, 4);
+  //ellipse(472-11, 412-15, 4, 4);
+  //ellipse(442, 384, 4, 4);
   popMatrix();
 }

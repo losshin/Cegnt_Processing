@@ -3,8 +3,8 @@ class TrukRoket {
   float Ypos;  // posisi y
   float kecepatan;  // kelajuan
   int rotatee = 1;
-  float putaranBan = 0;
-  float rotateroket = 0;
+  float putaranBan;
+  float rotateroket;
   
   // Constructor Unit
   TrukRoket(float Xpos, float Ypos, float kecepatan, float rotateroket){
@@ -305,8 +305,31 @@ class TrukRoket {
   void move(){
     Xpos += kecepatan;
     putaranBan += kecepatan;
-    if (putaranBan >= 0) {
-      audioTruckDriving.play();
+    
+    // Peluncur Roket Naik
+    if(rotateroket > 1.5560167){
+        println("Batas Rotasi");
+        audioHydraulic.stop();
+        rocketDown = true;
+    } else{
+      if(rocketLaunch){
+        rotateroket += 0.005;
+        if (!audioHydraulic.isPlaying()) {
+          audioHydraulic.play();
+        }
+      }    
+    }
+    
+    // Peluncur Roket Turun
+    if(rotateroket < 0){     
+      audioHydraulic.stop();
+    } else{
+      if(!rocketLaunch){
+        rotateroket -= 0.008;
+        if (!audioHydraulic.isPlaying()) {
+          audioHydraulic.play();
+        }
+      }
     }
   }
   

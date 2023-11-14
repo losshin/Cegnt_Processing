@@ -6,6 +6,7 @@ ArrayList<SeaStallion> unit1 = new ArrayList<SeaStallion>();
 ArrayList<TankDardoIrv> unit2 = new ArrayList<TankDardoIrv>();
 ArrayList<Lav25> unit3 = new ArrayList<Lav25>();
 ArrayList<TrukRoket> unit4 = new ArrayList<TrukRoket>();
+ArrayList<Slv> unit5 = new ArrayList<Slv>();
 ArrayList<Enemy> enemies = new ArrayList<Enemy>();
 
 Opening mainMenu;
@@ -13,8 +14,17 @@ Mountain mountain = new Mountain();
 
 int kes, highlightedUnit = -1, numStars = 200;
 Star[] sky = new Star[numStars];
-float moveCam;
-SoundFile audioHydraulic; 
+float lajuLav = 2;  // laju Lav 25
+float lajuSS = 2.5;  // Sea Stallion
+float lajuSLV = 2;  // Sherpa Light Vehicle
+float lajuDIrv = 2;  // Tank DardoIrv
+float lajuTR = 0.8;  // Truk Roket
+boolean selected, rocketLaunch, rocketDown;
+
+Sound In;
+SoundFile audioClick;
+SoundFile audioBackground;
+SoundFile audioHydraulic;
 SoundFile audioTruckDriving;
 
 void setup(){
@@ -38,38 +48,50 @@ void setup(){
   }
 
   // Audio
+  audioClick = new SoundFile(this, "./sound/klik_button.mp3");
   audioHydraulic = new SoundFile(this, "./sound/hydraulic lift SoundEffectsFactory.wav");
   audioTruckDriving = new SoundFile(this, "./sound/truck_driving.wav");
+  //audioBackground = new SoundFile(this, "./sound/backsound");
   
   // Audio Volume
-  audioHydraulic.amp(0.3);
-  audioTruckDriving.amp(0.1);
-  
-  enemies.add(new Enemy((width - 100), 350, 0, 500));
+  audioClick.amp(0.5);
+  audioHydraulic.amp(0.5);
+  audioTruckDriving.amp(0.4);
+
+  enemies.add(new Enemy((width - 90), 340, 0, 500));
 }
 
 void draw(){  
   background(0);
   push();
   translate(0,-250,-1);
+  
+  // Latar Belakang (Langit malam dan Pegunungan)
   setGradient(0, 0, width, 0.85 * height, b1, b2, 1);
   stroke(m1);
   mountain.display(5, 450);
   stroke(m2);
   mountain.display(1.5, 550);
   noStroke();
+  
   // kode bintang
   for (int i = 0; i < numStars; i++) {
     sky[i] = new Star();
   }
   pop();
   
-  mainMenu.show();
+  // Enemy Comeback!!!  
+  if (enemies.size() == 0 && second() == 30) {
+    enemies.add(new Enemy((width - 90), 340, 0, 500));
+  }
+  
+  //mainMenu.show();
+  bottomNavigation(0,460);
     
   println(kes);
 
-push();
-textSize(20);
+  push();
+  textSize(20);
   text("Mouse X = " + mouseX, width/2, 20);
   text("Mouse Y = " + mouseY, width/2, 60);
   pop();
@@ -82,29 +104,39 @@ void mouseClicked() {
     float buttonY = 510;
     float buttonWidth = 100;
     float buttonHeight = 80;
-    if (mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) {
+    if ((mouseX >= buttonX && mouseX <= buttonX + buttonWidth && mouseY >= buttonY && mouseY <= buttonY + buttonHeight) && selected) {
+      audioClick.play();
       if (i == 0) {
-        unit1.add(new SeaStallion(0, 100, 2.1, 0.1));  // Menambahkan objek SeaStallion ke ArrayList
+        unit1.add(new SeaStallion(0, 100, lajuSS, 0.1));  // Menambahkan objek SeaStallion ke ArrayList
       } else if (i == 1) {
-        unit2.add(new TankDardoIrv(-50, 350, 2, 0)); // Menambahkan objek TankDardoIrv ke ArrayList
+        unit2.add(new TankDardoIrv(-50, 350, lajuDIrv, 0)); // Menambahkan objek TankDardoIrv ke ArrayList
       } else if (i == 2) {
-        unit3.add(new Lav25(-200, 333, 3, 0)); // Menambahkan objek Lav 25 ke ArrayList
+        unit3.add(new Lav25(-200, 333, lajuLav, 0)); // Menambahkan objek Lav 25 ke ArrayList
       } else if (i == 3) {
-        unit4.add(new TrukRoket(-100, 277, 0.5,0)); // Menambahkan objek Truk Roket ke ArrayList
+        unit4.add(new TrukRoket(-100, 277, lajuTR,0)); // Menambahkan objek Truk Roket ke ArrayList
+      } else if (i == 4) {
+        unit5.add(new Slv(-100, 345, 2,0)); // Menambahkan objek Slv ke ArrayList
       }
-      
       
       println("Tombol Unit " + (i + 1) + " diklik!");  // Untuk cek posisi array/ tombol yang ditekan
       kes = i;
       break;
     }
-    btnNav += 115;  // jarak yang diberikan
-  } 
+    btnNav += 115;  // jarak antar box button
+  }
+  
+  // menu keluar dari game
+  //if (mouseX ) {
+    
+  //}
+
 }
 
 // Bottom Navigation
 void bottomNavigation(int posX, int posY) {
   int btnNav = 0;
+  selected = true;
+
   // icon
   SeaStallion ssIcon = new SeaStallion((width / 100) * 26, 510, 0,0);
   ssIcon.icon();
@@ -114,6 +146,12 @@ void bottomNavigation(int posX, int posY) {
   lavIcon.icon();
   TrukRoket trIcon = new TrukRoket((width / 100) * 50.5, 511, 0,0);
   trIcon.icon();
+  Slv slvIcon = new Slv((width/100) * 55.5, 495,0,0);
+  slvIcon.icon();
+    
+  // land
+  fill(0);
+  quad(0, 400, 0, height, width, height, width, 400);
     
   // Box Navigation
   push();    
@@ -124,13 +162,12 @@ void bottomNavigation(int posX, int posY) {
     
     // Box Units
     push();
-      //fill(255);
       translate(((width/100)*5),0,0);
       for (int i = 0; i < 6; i++) {
         if (i == highlightedUnit) {
-          fill(137, 137, 137); // Warna button ketika di tekan
+          fill(#0041FF); // Warna button ketika di tekan
         } else {
-          fill(255);  // Warna default (putih)
+          fill(#0E2A74);  // Warna default (putih)
         }
         rect(((width/100)*11.05)+btnNav, 50, 100, 80);  // Button
         btnNav += 115;
@@ -142,8 +179,113 @@ void bottomNavigation(int posX, int posY) {
       fill(255);
       rectMode(CENTER);
       rect(width/2, 25, 500, 38);
-    pop();
+    pop();   
   pop();
+  
+  // [Sea Stallion]
+  for (SeaStallion unit : unit1) {
+    for (Enemy enemy : enemies) {
+      float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+      if (distance < 50) {
+        unit.Xspeed = 0;
+        enemy.Xspeed = 0;
+      }
+    }
+    unit.display();
+    unit.move();
+  }
+    
+  // [Tank Dardo-Irv]
+  for (TankDardoIrv unit : unit2) {
+    //for (Enemy enemy : enemies) {
+    //  float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+    //  if (distance < 300) {
+    //    unit.Xspeed = 0;
+    //    enemy.Xspeed = 0;
+    //  }
+    //}
+    //if (enemies.size() == 0) {  //  ketika enemy lenyap
+      //unit.Xspeed = lajuDIrv;
+    //}
+    //if (!audioTruckDriving.isPlaying()) {
+    //    audioTruckDriving.play();
+    //    audioTruckDriving.loop(0.5);
+    //}
+    unit.display();
+    unit.move();
+    unit.tabrakEnemies(enemies);
+  }  
+  
+  // [Lav-25]
+  for (Lav25 unit : unit3) {
+    for (Enemy enemy : enemies) {
+      float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+      if (distance < 600) {
+        unit.Xspeed = 0;
+        enemy.Xspeed = 0;
+      }
+    }
+    if (enemies.size() == 0) {  //  ketika enemy lenyap
+      unit.Xspeed = lajuLav;
+    }
+    if (!audioTruckDriving.isPlaying()) {
+        audioTruckDriving.play();
+        audioTruckDriving.loop(0.5);
+    }
+    unit.display();
+    unit.move();
+    unit.tabrakEnemies(enemies);
+  }
+  
+  
+  // [Truk Roket]
+  for (TrukRoket unit : unit4) {
+    for (Enemy enemy : enemies) {
+      float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+      if (distance < 900) {    // jarak ally to enemy
+        unit.kecepatan = 0;
+        enemy.Xspeed = 0;
+        audioTruckDriving.stop();
+        rocketLaunch = true;
+      }
+    }
+    if (enemies.size() == 0) {  // ketika enemy lenyap, maka peluncur roket naik
+      unit.kecepatan = lajuTR;
+      rocketLaunch = false;
+    }
+    if (!audioTruckDriving.isPlaying()) {
+        audioTruckDriving.play();
+        audioTruckDriving.loop(0.5);
+    }
+    unit.display();
+    unit.move();
+  }
+  
+  // [Slv]
+  for (Slv unit : unit5) {
+    for (Enemy enemy : enemies) {
+      float distance = dist(unit.Xpos, unit.Ypos, enemy.Xpos, enemy.Ypos);
+      if (distance < 500) {  // jarak dari enemy
+        unit.Xspeed = 0;
+        enemy.Xspeed = 0;
+      }
+    }
+    if (enemies.size() == 0) {  //  ketika enemy lenyap
+      unit.Xspeed = lajuSLV;
+    }
+    if (!audioTruckDriving.isPlaying()) {
+        audioTruckDriving.play();
+        audioTruckDriving.loop(0.5);
+    }
+    unit.display();
+    unit.move();
+  }
+  
+  // [Enemy]
+  for (Enemy enemy : enemies) {
+    enemy.display();
+    enemy.move();
+  }
 }
 
 void mouseMoved() {
