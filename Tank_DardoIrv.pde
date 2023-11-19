@@ -167,7 +167,7 @@ class TankDardoIrv{
   void tabrakEnemies(ArrayList<Enemy> enemies) {
     for (int i = enemies.size() - 1; i >= 0; i--) {
       Enemy enemy = enemies.get(i);
-      float distance = dist(Xpos, Ypos, enemy.Xpos, enemy.Ypos);
+      float distance = dist(Xpos+30, Ypos, enemy.Xpos, enemy.Ypos);
       if (distance < 100) { // Jarak yang diperlukan untuk tabrakan
         enemy.kurangiKesehatan(10); // Kurangi kesehatan musuh
         if (enemy.kesehatan <= 0) {

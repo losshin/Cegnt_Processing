@@ -56,14 +56,14 @@ void setup(){
   audioBackground = new SoundFile(this, "./sound/backsound.mp3");
   
   // Audio Volume
-  audioClick.amp(0.3);
-  audioHeliBlades.amp(0.3);
+  audioClick.amp(0.4);
+  audioHeliBlades.amp(0.5);
   audioTankMove.amp(0.4);
   audioHydraulic.amp(0.5);
-  audioTruckDriving.amp(0.4);
+  audioTruckDriving.amp(0.5);
   audioBackground.amp(1.0);
   
-  enemies.add(new Enemy((width - 90), 340, 0, 500));
+  enemies.add(new Enemy((width - 90), 350, 0, 500));
 }
 
 void draw(){  
@@ -100,8 +100,9 @@ void draw(){
   Iterator<SeaStallion> ssIterator = unit1.iterator();
   while (ssIterator.hasNext()) {
     SeaStallion unit = ssIterator.next();
-    if (unit.Xpos >= width) {
+    if (unit.Xpos >= width+200) {
       ssIterator.remove();
+      audioHeliBlades.stop();
     } else {
       unit.display();
       unit.move();
@@ -114,6 +115,7 @@ void draw(){
     TankDardoIrv unit = diIterator.next();
     if (unit.Xpos >= width) {
       diIterator.remove();
+      audioTankMove.stop();
     } else {
       unit.display();
       unit.move();
@@ -140,6 +142,7 @@ void draw(){
     TrukRoket unit = trIterator.next();
     if (unit.Xpos >= width) {
       trIterator.remove();
+      audioTruckDriving.stop();
     } else {
       unit.display();
       unit.move();
@@ -171,7 +174,7 @@ void mouseClicked() {
       if (i == 0) {
         unit1.add(new SeaStallion(0, 100, lajuSS, 0.1));  // Menambahkan objek SeaStallion ke ArrayList
       } else if (i == 1) {
-        unit2.add(new TankDardoIrv(-50, 350, lajuDIrv, 0)); // Menambahkan objek TankDardoIrv ke ArrayList
+        unit2.add(new TankDardoIrv(-100, 350, lajuDIrv, 0)); // Menambahkan objek TankDardoIrv ke ArrayList
       } else if (i == 2) {
         unit3.add(new Lav25(-200, 333, lajuLav, 0)); // Menambahkan objek Lav 25 ke ArrayList
       } else if (i == 3) {
