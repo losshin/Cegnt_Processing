@@ -1,6 +1,8 @@
 class Opening {
   PFont menuFont, exitFont;
   int panels;
+  Logo logo = new Logo(350,100);
+
 
   Opening(PFont menuFont, PFont exitFont, int panels) {
     this.menuFont = menuFont;
@@ -30,6 +32,8 @@ class Opening {
     println("->menu");
     textFont(menuFont);
     fill(224, 224, 224);
+
+    logo.display();
 
     text("Play", 460, 496);
     textSize(50);
@@ -62,23 +66,26 @@ class Opening {
       }
     }
   }
+  
 
   // ------------------- Game --------------------------------------
   void play() {
-    if (key == 'q' || key == 'Q') {
-      unit1.clear();
-      unit2.clear();
-      unit3.clear();
-      unit4.clear();
-      unit5.clear();
-      enemies.clear();
-      audioHeliBlades.stop();
-      audioTankMove.stop();
-      audioClick.stop();
-      audioBackground.stop();
-      audioHydraulic.stop();
-      audioTruckDriving.stop();
-      mainMenu.menu();
+    if (keyPressed) {
+      if (key == 'q' || key == 'Q') {
+        unit1.clear();
+        unit2.clear();
+        unit3.clear();
+        unit4.clear();
+        unit5.clear();
+        audioHeliBlades.stop();
+        audioTankMove.stop();
+        audioClick.stop();
+        audioBackground.stop();
+        audioHydraulic.stop();
+        audioTruckDriving.stop();
+        selected = false;
+        panels = 0;
+      }
     }
     bottomNavigation(0, 460);    
   }
@@ -87,6 +94,7 @@ class Opening {
   // -------------------------- Credits -----------------------------
   void credits() {
     println("->credits");
+    selected = false;
     fill(224, 224, 224);
     text("Back", 180, 560);
     if (!audioBackground.isPlaying()) {
@@ -127,7 +135,7 @@ class Opening {
   void leave() {
     println("->exit");
     textFont(exitFont);
-
+    selected = false;
     fill(224, 224, 224);
     text("Are you Sure?", 354, 502);
     text("Yes...", 365, 554);
@@ -167,5 +175,93 @@ class Opening {
 
       break;
     }
+  }
+}
+
+
+// ------------------ Logo ----------------
+class Logo {
+  int Xpos, Ypos;
+  
+  Logo(int Xpos, int Ypos){
+    this.Xpos = Xpos;
+    this.Ypos = Ypos;
+  }
+
+  void display() {
+    push();
+    lights();
+    directionalLight(231, 255, 52, 0, -1000, 2);
+    translate(325, 100, 2);
+    scale(0.3);
+    logoDesign();
+    pop();
+  }
+  
+  void logoDesign() {
+    push();
+    fill(97,128,139);
+    push();
+    beginShape();
+    // Rear
+    vertex(723,256,2);
+    vertex(641,184,2);
+    vertex(430,184,2);
+    vertex(377,274,2);
+    vertex(377,493,2);
+    vertex(415,562,2);
+    vertex(636,562,2);
+    vertex(719,480,2);
+    vertex(659,467,2);
+    vertex(607,521,2);
+    vertex(461,521,2);
+    vertex(432,473,2);
+    vertex(432,277,2);
+    vertex(455,242,2);
+    vertex(615,242,2);
+    vertex(656,280,2);
+    
+    // Front
+    vertex(723,256,-2);
+    vertex(641,184,-2);
+    vertex(430,184,-2);
+    vertex(377,274,-2);
+    vertex(377,493,-2);
+    vertex(415,562,-2);
+    vertex(636,562,-2);
+    vertex(719,480,-2);
+    vertex(659,467,-2);
+    vertex(607,521,-2);
+    vertex(461,521,-2);
+    vertex(432,473,-2);
+    vertex(432,277,-2);
+    vertex(455,242,-2);
+    vertex(615,242,-2);
+    vertex(656,280,-2);
+    endShape();
+    pop();
+    
+    beginShape();
+    // Front
+    vertex(466,365,-2);
+    vertex(451,395,-2);
+    vertex(663,395,-2);
+    vertex(676,447,-2);
+    vertex(716,465,-2);
+    vertex(688,287,-2);
+    vertex(661,302,-2);
+    vertex(655,351,-2);
+    
+    // Rear
+    vertex(466,365,2);
+    vertex(451,395,2);
+    vertex(663,395,2);
+    vertex(676,447,2);
+    vertex(716,465,2);
+    vertex(688,287,2);
+    vertex(661,302,2);
+    vertex(655,351,2);
+    endShape(CLOSE);
+    pop();
   }
 }

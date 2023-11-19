@@ -17,8 +17,9 @@ class Enemy {
   void display() {
     push();
     translate(Xpos, Ypos);
-    musuh();
+    //musuh();
     //box(100);
+    pagar();
     pop();
   }
 
@@ -49,5 +50,16 @@ class Enemy {
     box(80, 25, 30);
     pop();
     popMatrix();
+  }
+  
+  void pagar() {
+   push();
+   box(4, 100, 100);
+   push();
+   rotateZ(-0.9);
+   translate(-6,50,0);
+   box(2,80, 100);
+   pop();
+   pop();
   }
 }
