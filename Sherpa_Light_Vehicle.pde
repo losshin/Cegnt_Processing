@@ -53,7 +53,7 @@ class Slv {
       }
     }
   }
-  
+
   
   // desain slv
   void slv() {

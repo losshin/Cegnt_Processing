@@ -147,6 +147,9 @@ class TankDardoIrv{
     Xpos += Xspeed;
     tabrakEnemies(enemies); // Cek tabrakan dengan musuh
     turretMuzzleRotation += 0; // Kecepatan rotasi
+    if (Xpos >= width) {
+      
+    }
   }
   
   // Icon

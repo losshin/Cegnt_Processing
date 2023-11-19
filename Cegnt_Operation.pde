@@ -1,6 +1,7 @@
 import processing.core.PApplet;
 import processing.sound.*;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 ArrayList<SeaStallion> unit1 = new ArrayList<SeaStallion>();
 ArrayList<TankDardoIrv> unit2 = new ArrayList<TankDardoIrv>();
@@ -17,11 +18,12 @@ Star[] sky = new Star[numStars];
 float lajuLav = 2;  // laju Lav 25
 float lajuSS = 2.5;  // Sea Stallion
 float lajuSLV = 2;  // Sherpa Light Vehicle
-float lajuDIrv = 2;  // Tank DardoIrv
+float lajuDIrv = 1.5;  // Tank DardoIrv
 float lajuTR = 0.8;  // Truk Roket
 boolean selected, rocketLaunch, rocketDown;
 
-Sound In;
+SoundFile audioHeliBlades;
+SoundFile audioTankMove;
 SoundFile audioClick;
 SoundFile audioBackground;
 SoundFile audioHydraulic;
@@ -43,21 +45,24 @@ void setup(){
   b2 = color(0, 105, 229);
   m1 = color(19, 0, 115);
   m2 = color(1, 16, 142);
-  for (int i = 0; i < numStars; i++) {
-    sky[i] = new Star();
-  }
+
 
   // Audio
   audioClick = new SoundFile(this, "./sound/klik_button.mp3");
   audioHydraulic = new SoundFile(this, "./sound/hydraulic lift SoundEffectsFactory.wav");
   audioTruckDriving = new SoundFile(this, "./sound/truck_driving.wav");
-  //audioBackground = new SoundFile(this, "./sound/backsound");
+  audioTankMove = new SoundFile(this, "./sound/tank-moving.mp3");
+  audioHeliBlades = new SoundFile(this, "./sound/helicopter_blades.wav");
+  audioBackground = new SoundFile(this, "./sound/backsound.mp3");
   
   // Audio Volume
-  audioClick.amp(0.5);
+  audioClick.amp(0.3);
+  audioHeliBlades.amp(0.3);
+  audioTankMove.amp(0.4);
   audioHydraulic.amp(0.5);
   audioTruckDriving.amp(0.4);
-
+  audioBackground.amp(1.0);
+  
   enemies.add(new Enemy((width - 90), 340, 0, 500));
 }
 
@@ -65,7 +70,7 @@ void draw(){
   background(0);
   push();
   translate(0,-250,-1);
-  
+      
   // Latar Belakang (Langit malam dan Pegunungan)
   setGradient(0, 0, width, 0.85 * height, b1, b2, 1);
   stroke(m1);
@@ -73,28 +78,85 @@ void draw(){
   stroke(m2);
   mountain.display(1.5, 550);
   noStroke();
-  
+    
   // kode bintang
   for (int i = 0; i < numStars; i++) {
     sky[i] = new Star();
   }
   pop();
   
+
   // Enemy Comeback!!!  
   if (enemies.size() == 0 && second() == 30) {
     enemies.add(new Enemy((width - 90), 340, 0, 500));
   }
-  
-  //mainMenu.show();
-  bottomNavigation(0,460);
     
+  mainMenu.show();
+  //bottomNavigation(0,460);
+  //mainMenu.credits();
   println(kes);
+  
+  // [Sea Stallion]
+  Iterator<SeaStallion> ssIterator = unit1.iterator();
+  while (ssIterator.hasNext()) {
+    SeaStallion unit = ssIterator.next();
+    if (unit.Xpos >= width) {
+      ssIterator.remove();
+    } else {
+      unit.display();
+      unit.move();
+    }
+  }
 
-  push();
-  textSize(20);
-  text("Mouse X = " + mouseX, width/2, 20);
-  text("Mouse Y = " + mouseY, width/2, 60);
-  pop();
+  // [Tank Dardo-Irv]
+  Iterator<TankDardoIrv> diIterator = unit2.iterator();
+  while (diIterator.hasNext()) {
+    TankDardoIrv unit = diIterator.next();
+    if (unit.Xpos >= width) {
+      diIterator.remove();
+    } else {
+      unit.display();
+      unit.move();
+      unit.tabrakEnemies(enemies);
+    }
+  }
+
+  // [Lav-25]
+  Iterator<Lav25> lavIterator = unit3.iterator();
+  while (lavIterator.hasNext()) {
+    Lav25 unit = lavIterator.next();
+    if (unit.Xpos >= width) {
+      lavIterator.remove();
+    } else {
+      unit.display();
+      unit.move();
+      unit.tabrakEnemies(enemies);
+    }
+  }
+
+  // [Truk Roket]
+  Iterator<TrukRoket> trIterator = unit4.iterator();
+  while (trIterator.hasNext()) {
+    TrukRoket unit = trIterator.next();
+    if (unit.Xpos >= width) {
+      trIterator.remove();
+    } else {
+      unit.display();
+      unit.move();
+    }
+  }
+
+  // [Slv]
+  Iterator<Slv> slvIterator = unit5.iterator();
+  while (slvIterator.hasNext()) {
+    Slv unit = slvIterator.next();
+    if (unit.Xpos >= width) {
+      slvIterator.remove();
+    } else {
+      unit.display();
+      unit.move();
+    }
+  }  
 }
 
 void mouseClicked() {
@@ -124,12 +186,6 @@ void mouseClicked() {
     }
     btnNav += 115;  // jarak antar box button
   }
-  
-  // menu keluar dari game
-  //if (mouseX ) {
-    
-  //}
-
 }
 
 // Bottom Navigation
@@ -174,7 +230,7 @@ void bottomNavigation(int posX, int posY) {
       }
     pop();
     
-    // Area Show (Sebagai luas pandang map)
+    // Area Show (Sebagai luas pandang map// belum berfungsi)
     push();
       fill(255);
       rectMode(CENTER);
@@ -190,6 +246,10 @@ void bottomNavigation(int posX, int posY) {
         unit.Xspeed = 0;
         enemy.Xspeed = 0;
       }
+    }
+    if (!audioHeliBlades.isPlaying()) {
+        audioHeliBlades.play();
+        audioHeliBlades.loop(0.5);
     }
     unit.display();
     unit.move();
@@ -207,10 +267,11 @@ void bottomNavigation(int posX, int posY) {
     //if (enemies.size() == 0) {  //  ketika enemy lenyap
       //unit.Xspeed = lajuDIrv;
     //}
-    //if (!audioTruckDriving.isPlaying()) {
-    //    audioTruckDriving.play();
-    //    audioTruckDriving.loop(0.5);
-    //}
+
+    if (!audioTankMove.isPlaying()) {
+        audioTankMove.play();
+        audioTankMove.loop(0.5);
+    }
     unit.display();
     unit.move();
     unit.tabrakEnemies(enemies);

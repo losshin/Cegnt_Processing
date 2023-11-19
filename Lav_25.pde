@@ -134,8 +134,8 @@ class Lav25{
   // Pergerakan
   void move() {
     Xpos += Xspeed;
-    if (Xpos > width) {
-      
+    if (Xpos > width+100) {
+       unit3.remove(0);
     }
   }
   
