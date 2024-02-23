@@ -7,4 +7,6 @@
 2109106047 - [Muhammad Irsyadul Asyrof H](https://github.com/irsyydl)  
 
 ## Introduction  
-Cegnt Operation, Adalah suatu game yang sedang dikembangkan untuk memenuhi Project Akhir Komputer Grafik menggunakan [Processing](https://processing.org) dengan genre RTS (konsep awal). Pengembangan Game ini terinspirasi dari game Shadez: The Black Operation karya Sean Cooper.
+Cegnt Operation, is a game that is being developed to fulfill the Final Computer Graphics Project using [Processing](https://processing.org) with the RTS genre (initial concept). The development of this game was inspired by the game Shadez: The Black Operation by Sean Cooper.  
+  
+<b>notes: Currently, the project is suspended or terminated</b><br>
